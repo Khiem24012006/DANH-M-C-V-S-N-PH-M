@@ -86,7 +86,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DAL\App.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

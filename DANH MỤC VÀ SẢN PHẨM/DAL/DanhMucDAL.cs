@@ -16,14 +16,16 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM.DAL
 
         public DataTable LoadFormDM()
         {
-            using (SqlDataAdapter da = new SqlDataAdapter())
-                
+           using (SqlConnection conn = KETNOIDB.TaoKetNoi())
             {
+                conn.Open();
                 string sql = "SELECT MaDM, TenDM FROM DanhMuc";
-                DataTable dt = new DataTable();
-                da.SelectCommand = new SqlCommand(sql, KETNOIDB.TaoKetNoi());
-                da.Fill(dt);
-                return dt;
+                using (SqlDataAdapter da = new SqlDataAdapter(sql, conn))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
             }
         }
 
@@ -74,14 +76,20 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM.DAL
         
         public DataTable TimKiemDanhMuc(string tuKhoa)
         {
-            using (SqlDataAdapter da = new SqlDataAdapter())
+           using (SqlConnection conn = KETNOIDB.TaoKetNoi())
             {
+                conn.Open();
                 string sql = "SELECT MaDM, TenDM FROM DanhMuc WHERE MaDM LIKE @TuKhoa OR TenDM LIKE @TuKhoa";
-                DataTable dt = new DataTable();
-                da.SelectCommand = new SqlCommand(sql, KETNOIDB.TaoKetNoi());
-                da.SelectCommand.Parameters.Add("@TuKhoa", SqlDbType.NVarChar, 100).Value = "%" + tuKhoa + "%";
-                da.Fill(dt);
-                return dt;
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.Add("@TuKhoa", SqlDbType.NVarChar, 100).Value = "%" + tuKhoa + "%";
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
             }
         }
 

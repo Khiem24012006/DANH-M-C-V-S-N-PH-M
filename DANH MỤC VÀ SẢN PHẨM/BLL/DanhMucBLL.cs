@@ -1,18 +1,20 @@
-﻿using System;
+﻿using DANH_MỤC_VÀ_SẢN_PHẨM.DAL;
+using DANH_MỤC_VÀ_SẢN_PHẨM.DTO;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;  
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;  
-using DANH_MỤC_VÀ_SẢN_PHẨM.DAL;
-using DANH_MỤC_VÀ_SẢN_PHẨM.DTO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace DANH_MỤC_VÀ_SẢN_PHẨM.BLL
 {
     public class DanhMucBLL
     {
         DanhMucDAL dmDAL = new DanhMucDAL();
+        // Các phương thức xử lý nghiệp vụ liên quan đến danh mục
         public string ThemDanhMuc(DanhMucDTO dm)
         {
             if(string.IsNullOrWhiteSpace(dm.MaDM) || string.IsNullOrWhiteSpace(dm.TenDM))
@@ -27,9 +29,9 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM.BLL
             {
                 return "Tên danh mục không được vượt quá 100 ký tự.";
             }
-            if(!Regex.IsMatch(dm.MaDM, @"^DM\d{2}$"))//cú pháp bắt buộc 
+            if (!Regex.IsMatch(dm.MaDM, @"^DM\d{2}$"))
             {
-                return "Mã danh mục chỉ được chứa ký tự chữ và số, không được chứa ký tự đặc biệt.Cú pháp DM+00N";
+                return "Mã danh mục phải theo định dạng DM + 2 chữ số (ví dụ: DM01).";
             }
             try
             {
@@ -55,7 +57,6 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM.BLL
 
 
         }
-
 
         public string SuaDanhMuc(DanhMucDTO dm)
         {
@@ -120,6 +121,53 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM.BLL
             catch (Exception ex)
             {
                 return "Lỗi hệ thống: " + ex.Message;
+            }
+        }
+
+        public DataTable LoadFormDM(out string errorMessage)
+        {
+            errorMessage = null;
+            try
+            {
+                return dmDAL.LoadFormDM();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 53 || ex.Number == 4060)
+                    errorMessage = "Không thể kết nối đến máy chủ SQL Server (Mr-khieem)!";
+                else
+                    errorMessage = "Lỗi cơ sở dữ liệu khi tải danh mục: " + ex.Message;
+                return new DataTable();
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi hệ thống: " + ex.Message;
+                return new DataTable();
+            }
+        }
+
+        public DataTable TimKiemDanhMuc(string tuKhoa, out string errorMessage)
+        {
+            errorMessage = null;
+            try
+            {
+                if (string.IsNullOrWhiteSpace(tuKhoa))
+                    return dmDAL.LoadFormDM();
+
+                return dmDAL.TimKiemDanhMuc(tuKhoa.Trim());
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 53 || ex.Number == 4060)
+                    errorMessage = "Không thể kết nối đến máy chủ SQL Server (Mr-khieem)!";
+                else
+                    errorMessage = "Lỗi cơ sở dữ liệu khi tìm kiếm: " + ex.Message;
+                return new DataTable();
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi hệ thống: " + ex.Message;
+                return new DataTable();
             }
         }
     }

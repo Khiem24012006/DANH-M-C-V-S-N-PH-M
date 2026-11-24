@@ -50,12 +50,12 @@
             this.lblMaDM = new System.Windows.Forms.Label();
             this.pnlQuanLyDM = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.lblTongSanPham = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lblQuanlyDM = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblTongSanPham = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.tpDanhMuc.SuspendLayout();
             this.pnlThongTinHienThi.SuspendLayout();
@@ -356,14 +356,14 @@
             this.panel2.Size = new System.Drawing.Size(148, 63);
             this.panel2.TabIndex = 1;
             // 
-            // lblTongSanPham
+            // label4
             // 
-            this.lblTongSanPham.AutoSize = true;
-            this.lblTongSanPham.Location = new System.Drawing.Point(47, 30);
-            this.lblTongSanPham.Name = "lblTongSanPham";
-            this.lblTongSanPham.Size = new System.Drawing.Size(35, 13);
-            this.lblTongSanPham.TabIndex = 2;
-            this.lblTongSanPham.Text = "label5";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(55, 30);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "label4";
             // 
             // label2
             // 
@@ -395,15 +395,6 @@
             this.panel1.Size = new System.Drawing.Size(148, 63);
             this.panel1.TabIndex = 0;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(55, 30);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "label4";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -413,6 +404,15 @@
             this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Tổng danh mục";
+            // 
+            // lblTongSanPham
+            // 
+            this.lblTongSanPham.AutoSize = true;
+            this.lblTongSanPham.Location = new System.Drawing.Point(47, 30);
+            this.lblTongSanPham.Name = "lblTongSanPham";
+            this.lblTongSanPham.Size = new System.Drawing.Size(35, 13);
+            this.lblTongSanPham.TabIndex = 2;
+            this.lblTongSanPham.Text = "label5";
             // 
             // Form1
             // 

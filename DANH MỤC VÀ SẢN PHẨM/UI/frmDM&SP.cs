@@ -23,16 +23,24 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
         {
             InitializeComponent();
         }
-        DanhMucDAL dmDAL = new DanhMucDAL();
+        
         DanhMucBLL dmBLL = new DanhMucBLL();
         DanhMucDTO dmDTO=new DanhMucDTO();
+        
+        private void TaiDanhSachDanhMuc()
+        {
+            DataTable dt = dmBLL.LoadFormDM(out string err);
+            if (!string.IsNullOrEmpty(err))
+            {
+                MessageBox.Show(err, "Lỗi tải dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            dgvDanhMuc.DataSource = dt;
+            UpdateTongSanPham();
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-            dgvDanhMuc.DataSource= dmDAL.LoadFormDM();
-            UpdateTongSanPham();
-
-
+            TaiDanhSachDanhMuc();
+    
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -44,8 +52,8 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
             if(thongbao== "Thêm danh mục thành công!")
             {
                 MessageBox.Show(thongbao);
-                dgvDanhMuc.DataSource = dmDAL.LoadFormDM();
-                UpdateTongSanPham();
+                TaiDanhSachDanhMuc();
+                btnLamMoi_Click(null, null);
             }
             else
             {
@@ -54,7 +62,14 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
+
         {
+            //if (string.IsNullOrWhiteSpace(txtMaDM.Text))
+            //{
+            //    MessageBox.Show("Vui lòng chọn danh mục cần xóa!", "Thông báo",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
             DialogResult xacNhan = MessageBox.Show(
             $"Bạn có chắc chắn muốn xóa danh mục '{txtTenDM.Text.Trim()}' (Mã: {txtMaDM.Text.Trim()}) không?",
             "Xác nhận xóa",
@@ -69,8 +84,8 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
                 if (thongbao == "Xóa danh mục thành công!")
                 {
                     MessageBox.Show(thongbao);
-                    dgvDanhMuc.DataSource = dmDAL.LoadFormDM();
-                    UpdateTongSanPham();
+                    TaiDanhSachDanhMuc();
+                    btnLamMoi_Click(null, null);
                 }
                 else
                 {
@@ -98,8 +113,8 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
             if(thongbao == "Sửa danh mục thành công!")
             {
                 MessageBox.Show(thongbao);
-                dgvDanhMuc.DataSource = dmDAL.LoadFormDM();
-                UpdateTongSanPham();
+                TaiDanhSachDanhMuc();
+                btnLamMoi_Click(null, null);
             }
             else
             {
@@ -109,18 +124,26 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            dgvDanhMuc.DataSource = dmDAL.TimKiemDanhMuc(txtTimKiem.Text.Trim());
+            DataTable dt = dmBLL.TimKiemDanhMuc(txtTimKiem.Text, out string err);
+            if (!string.IsNullOrEmpty(err))
+            {
+                MessageBox.Show(err, "Lỗi tìm kiếm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            dgvDanhMuc.DataSource = dt;
+            UpdateTongSanPham();
         }
 
         private void dgvDanhMuc_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dgvDanhMuc.Rows[e.RowIndex];
-                txtMaDM.Text = row.Cells["MaDM"].Value.ToString();
-                txtTenDM.Text = row.Cells["TenDM"].Value.ToString();
-                txtMaDM.Enabled = false; // Vô hiệu hóa TextBox MaDM khi chọn một danh mục từ DataGridView
-            }
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dgvDanhMuc.Rows[e.RowIndex];
+            if (row.IsNewRow) return; // Bỏ qua dòng trống cuối bảng
+
+            txtMaDM.Text = row.Cells["MaDM"].Value?.ToString() ?? "";
+            txtTenDM.Text = row.Cells["TenDM"].Value?.ToString() ?? "";
+            txtMaDM.Enabled = false;
         }
           
         public void UpdateTongSanPham()
