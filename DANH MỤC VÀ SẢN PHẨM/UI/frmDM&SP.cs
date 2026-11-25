@@ -150,8 +150,7 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
         {
            
             int tongSanPham = dgvDanhMuc.Rows.Count;
-            lblTongSanPham.Text = tongSanPham.ToString();
+            lblTongDanhMuc.Text = tongSanPham.ToString();
         }
-
     }
 }
