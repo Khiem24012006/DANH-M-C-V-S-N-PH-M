@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\DanhMucBLL.cs" />
+    <Compile Include="BLL\SanPhamBLL.cs" />
     <Compile Include="DAL\DanhMucDAL.cs" />
     <Compile Include="DAL\KETNOIDB.cs" />
     <Compile Include="DAL\SanPhamDAL.cs" />

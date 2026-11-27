@@ -26,7 +26,10 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
         
         DanhMucBLL dmBLL = new DanhMucBLL();
         DanhMucDTO dmDTO=new DanhMucDTO();
-        
+
+        SanPhamDTO spDTO = new SanPhamDTO();
+        SanPhamBLL spBLL = new SanPhamBLL();
+
         private void TaiDanhSachDanhMuc()
         {
             DataTable dt = dmBLL.LoadFormDM(out string err);
@@ -37,10 +40,21 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
             dgvDanhMuc.DataSource = dt;
             UpdateTongSanPham();
         }
+       private void TaiDanhSachSanPham()
+        {
+             DataTable dt= spBLL.LoadFormSP(out string err);
+            if(!string.IsNullOrEmpty(err))
+            {
+                MessageBox.Show(err, "Lỗi tải dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            dgvSach.DataSource = dt;
+            UpdateTongSanPham();
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             TaiDanhSachDanhMuc();
-    
+            TaiDanhSachSanPham();
+            LoadDanhMucLenComboBox();
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -151,6 +165,34 @@ namespace DANH_MỤC_VÀ_SẢN_PHẨM
            
             int tongSanPham = dgvDanhMuc.Rows.Count;
             lblTongDanhMuc.Text = tongSanPham.ToString();
+        }
+
+        private void dgvSach_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.RowIndex < 0) return;
+            DataGridViewRow row = dgvSach.Rows[e.RowIndex];
+
+            
+            txtMaSach.Text = row.Cells["MaSP"].Value?.ToString() ?? "";
+            txtTenSach.Text = row.Cells["TenSP"].Value?.ToString() ?? "";
+            cboDanhMuc.SelectedValue = row.Cells["MaDM"].Value?.ToString() ?? "";
+            numGiaBan.Value = Convert.ToDecimal(row.Cells["DonGia"].Value);
+            numSoLuong.Value = Convert.ToInt32(row.Cells["SoLuong"].Value);
+            txtMoTa.Text = row.Cells["MoTa"].Value?.ToString() ?? "";
+            ptbAnhBia.ImageLocation = row.Cells["HinhAnh"].Value?.ToString() ?? "";
+        }
+
+        private void LoadDanhMucLenComboBox()
+        {
+            DataTable dt = dmBLL.LoadFormDM(out string err);
+            if (!string.IsNullOrEmpty(err))
+            {
+                MessageBox.Show(err, "Lỗi tải dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            cboDanhMuc.DataSource = dt;
+            cboDanhMuc.DisplayMember = "TenDM";
+            cboDanhMuc.ValueMember = "MaDM";
         }
     }
 }
